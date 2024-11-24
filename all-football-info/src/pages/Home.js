@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { useGetMatchesQuery } from "../api/footballApi";
+import GameDetailsModal from "../components/GameDetailsModal"; // Correct Modal import
+import { useGetMatchesQuery } from "../api/footballApi"; // API query
 
 // Sort matches by date
 const sortMatches = (matches) => {
@@ -10,9 +11,12 @@ const sortMatches = (matches) => {
 };
 
 const Home = () => {
-  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39) by default
+  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39)
   const scrollContainerRef = useRef(null);
   const divisoryRef = useRef(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMatch, setSelectedMatch] = useState(null);
 
   useEffect(() => {
     if (scrollContainerRef.current && divisoryRef.current) {
@@ -24,7 +28,7 @@ const Home = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading matches</p>;
 
-  const matches = data?.response || []; // Fallback if data is undefined
+  const matches = data?.response || [];
   const today = new Date();
 
   // Sort matches and find the divisory index
@@ -33,9 +37,18 @@ const Home = () => {
     (match) => new Date(match.fixture.date) >= today
   );
 
-  // Scroll to the divisory point when the button is clicked
-  const handleResetScroll = () => {
-    divisoryRef.current?.scrollIntoView({ behavior: "smooth", inline: "center" });
+  // Open modal with match details
+  const handleMatchClick = (match) => {
+    console.log("Selected Match:", match); // Debug selected match data
+    setSelectedMatch(match);
+    setIsModalOpen(true);
+  };
+  
+
+  // Close modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMatch(null);
   };
 
   return (
@@ -52,42 +65,84 @@ const Home = () => {
           {sortedMatches.map((match, index) => (
             <MatchCard
               key={match.fixture.id}
-              match={match}
+              onClick={() => handleMatchClick(match)}
               ref={index === divisoryIndex ? divisoryRef : null}
-            />
+            >
+              <TeamLogo src={match.teams.home.logo} alt={match.teams.home.name} />
+              <MatchDetails>
+                <strong>{match.teams.home.name}</strong>
+                <span>vs</span>
+                <strong>{match.teams.away.name}</strong>
+                <small>
+                  {new Date(match.fixture.date).toLocaleDateString("en-GB")} -{" "}
+                  {new Date(match.fixture.date).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </small>
+                {new Date(match.fixture.date) < today && (
+                  <Score>
+                    {match.score.fulltime.home} : {match.score.fulltime.away}
+                  </Score>
+                )}
+              </MatchDetails>
+              <TeamLogo src={match.teams.away.logo} alt={match.teams.away.name} />
+            </MatchCard>
           ))}
         </MatchesScroll>
         <CenteredButton>
-          <ResetButton onClick={handleResetScroll}>Return to Today</ResetButton>
+          <ResetButton onClick={() => divisoryRef.current?.scrollIntoView({ behavior: "smooth", inline: "center" })}>
+            Return to Today
+          </ResetButton>
         </CenteredButton>
       </MatchesSection>
-    </HomeContainer>
-  );
-};
 
-const MatchCard = React.forwardRef(({ match }, ref) => (
-  <MatchCardContainer ref={ref}>
-    <TeamLogo src={match.teams.home.logo} alt={match.teams.home.name} />
-    <MatchDetails>
-      <strong>{match.teams.home.name}</strong>
-      <span>vs</span>
-      <strong>{match.teams.away.name}</strong>
-      <small>
-        {new Date(match.fixture.date).toLocaleDateString("en-GB")} -{" "}
-        {new Date(match.fixture.date).toLocaleTimeString([], {
+      {/* Match Details Modal */}
+<GameDetailsModal isOpen={isModalOpen} onClose={handleCloseModal}>
+  {selectedMatch ? (
+    <>
+      <h2>Match Details</h2>
+      <p>
+        <strong>Date:</strong>{" "}
+        {new Date(selectedMatch.fixture.date).toLocaleDateString("en-GB")}
+      </p>
+      <p>
+        <strong>Time:</strong>{" "}
+        {new Date(selectedMatch.fixture.date).toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         })}
-      </small>
-      {new Date(match.fixture.date) < new Date() && (
-        <Score>
-          {match.score.fulltime.home} : {match.score.fulltime.away}
-        </Score>
+      </p>
+      <p>
+        <strong>Venue:</strong> {selectedMatch.fixture.venue.name},{" "}
+        {selectedMatch.fixture.venue.city}
+      </p>
+      <p>
+        <strong>Referee:</strong> {selectedMatch.fixture.referee || "N/A"}
+      </p>
+      {new Date(selectedMatch.fixture.date) < new Date() && (
+        <>
+          <p>
+            <strong>Score:</strong> {selectedMatch.score.fulltime.home} -{" "}
+            {selectedMatch.score.fulltime.away}
+          </p>
+          <p>
+            <strong>Scorers:</strong>{" "}
+            {selectedMatch.events
+              ?.filter((event) => event.type === "Goal")
+              ?.map((event) => `${event.player.name} (${event.team.name})`)
+              .join(", ") || "N/A"}
+          </p>
+        </>
       )}
-    </MatchDetails>
-    <TeamLogo src={match.teams.away.logo} alt={match.teams.away.name} />
-  </MatchCardContainer>
-));
+    </>
+  ) : (
+    <p>Loading match details...</p>
+  )}
+</GameDetailsModal>
+    </HomeContainer>
+  );
+};
 
 // Styled Components
 const fadeIn = keyframes`
@@ -164,7 +219,7 @@ const MatchesScroll = styled.div`
   }
 `;
 
-const MatchCardContainer = styled.div`
+const MatchCard = styled.div`
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   backdrop-filter: blur(10px);
@@ -214,6 +269,10 @@ const Score = styled.div`
   margin-top: 5px;
   font-size: 1rem;
   color: #ffd700;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid #ffd700;
+  padding: 5px 10px;
 `;
 
 const TeamLogo = styled.img`
