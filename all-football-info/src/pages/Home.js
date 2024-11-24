@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import GameDetailsModal from "../components/GameDetailsModal"; // Correct Modal import
-import { useGetMatchesQuery } from "../api/footballApi"; // API query
+import GameDetailsModal from "../components/GameDetailsModal";
+import { useGetMatchesQuery } from "../api/footballApi";
 
 // Sort matches by date
 const sortMatches = (matches) => {
@@ -20,7 +20,6 @@ const Home = () => {
 
   useEffect(() => {
     if (scrollContainerRef.current && divisoryRef.current) {
-      // Scroll to the divisory point on load
       divisoryRef.current.scrollIntoView({ behavior: "smooth", inline: "center" });
     }
   }, [data]);
@@ -39,11 +38,9 @@ const Home = () => {
 
   // Open modal with match details
   const handleMatchClick = (match) => {
-    console.log("Selected Match:", match); // Debug selected match data
     setSelectedMatch(match);
     setIsModalOpen(true);
   };
-  
 
   // Close modal
   const handleCloseModal = () => {
@@ -98,48 +95,77 @@ const Home = () => {
       </MatchesSection>
 
       {/* Match Details Modal */}
-<GameDetailsModal isOpen={isModalOpen} onClose={handleCloseModal}>
-  {selectedMatch ? (
-    <>
-      <h2>Match Details</h2>
-      <p>
-        <strong>Date:</strong>{" "}
-        {new Date(selectedMatch.fixture.date).toLocaleDateString("en-GB")}
-      </p>
-      <p>
-        <strong>Time:</strong>{" "}
-        {new Date(selectedMatch.fixture.date).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </p>
-      <p>
-        <strong>Venue:</strong> {selectedMatch.fixture.venue.name},{" "}
-        {selectedMatch.fixture.venue.city}
-      </p>
-      <p>
-        <strong>Referee:</strong> {selectedMatch.fixture.referee || "N/A"}
-      </p>
-      {new Date(selectedMatch.fixture.date) < new Date() && (
-        <>
-          <p>
-            <strong>Score:</strong> {selectedMatch.score.fulltime.home} -{" "}
-            {selectedMatch.score.fulltime.away}
-          </p>
-          <p>
-            <strong>Scorers:</strong>{" "}
-            {selectedMatch.events
-              ?.filter((event) => event.type === "Goal")
-              ?.map((event) => `${event.player.name} (${event.team.name})`)
-              .join(", ") || "N/A"}
-          </p>
-        </>
-      )}
-    </>
-  ) : (
-    <p>Loading match details...</p>
-  )}
-</GameDetailsModal>
+      <GameDetailsModal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {selectedMatch && (
+          <>
+            <ModalTitle>
+              <h3>Match Details</h3>
+            </ModalTitle>
+            <ModalHeader>
+              <img
+                src={selectedMatch.league.logo}
+                alt={selectedMatch.league.name}
+                style={{ width: "50px", height: "50px" }}
+              />
+              <h2>{selectedMatch.league.name}</h2>
+            </ModalHeader>
+            <ModalTeams>
+              <div>
+                <img
+                  src={selectedMatch.teams.home.logo}
+                  alt={selectedMatch.teams.home.name}
+                  style={{ width: "60px", height: "60px" }}
+                />
+                <strong>{selectedMatch.teams.home.name}</strong>
+              </div>
+              <span>vs</span>
+              <div>
+                <img
+                  src={selectedMatch.teams.away.logo}
+                  alt={selectedMatch.teams.away.name}
+                  style={{ width: "60px", height: "60px" }}
+                />
+                <strong>{selectedMatch.teams.away.name}</strong>
+              </div>
+            </ModalTeams>
+            <ModalDetails>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(selectedMatch.fixture.date).toLocaleDateString("en-GB")}
+              </p>
+              <p>
+                <strong>Time:</strong>{" "}
+                {new Date(selectedMatch.fixture.date).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+              <p>
+                <strong>Venue:</strong> {selectedMatch.fixture.venue.name},{" "}
+                {selectedMatch.fixture.venue.city}
+              </p>
+              <p>
+                <strong>Referee:</strong>{" "}
+                {selectedMatch.fixture.referee || "Not assigned"}
+              </p>
+              {new Date(selectedMatch.fixture.date) < today && (
+                <Scores>
+                  <p>
+                    <strong>Halftime:</strong>{" "}
+                    {selectedMatch.score.halftime.home} -{" "}
+                    {selectedMatch.score.halftime.away}
+                  </p>
+                  <p>
+                    <strong>Fulltime:</strong>{" "}
+                    {selectedMatch.score.fulltime.home} -{" "}
+                    {selectedMatch.score.fulltime.away}
+                  </p>
+                </Scores>
+              )}
+            </ModalDetails>
+          </>
+        )}
+      </GameDetailsModal>
     </HomeContainer>
   );
 };
@@ -265,16 +291,6 @@ const MatchDetails = styled.div`
   }
 `;
 
-const Score = styled.div`
-  margin-top: 5px;
-  font-size: 1rem;
-  color: #ffd700;
-  font-weight: bold;
-  border-radius: 5px;
-  border: 2px solid #ffd700;
-  padding: 5px 10px;
-`;
-
 const TeamLogo = styled.img`
   width: 50px;
   height: 50px;
@@ -304,6 +320,75 @@ const ResetButton = styled.button`
     transform: scale(1.1);
     background: #0056b3;
   }
+`;
+
+const Score = styled.div`
+  margin-top: 5px;
+  font-size: 1rem;
+  color: #ffd700;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid #ffd700;
+  padding: 5px 10px;
+`;
+
+const ModalTitle = styled.h2`
+  text-align: left;
+  
+`;
+
+const ModalHeader = styled.div`
+  text-align: center;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+`;
+
+const ModalTeams = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+
+  div {
+    text-align: center;
+
+    img {
+      margin: 0 auto;
+    }
+
+    strong {
+      display: block;
+      margin-top: 5px;
+    }
+  }
+
+  span {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+`;
+
+const ModalDetails = styled.div`
+  text-align: center;
+
+  p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+`;
+
+const Scores = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px solid #000;
 `;
 
 export default Home;
