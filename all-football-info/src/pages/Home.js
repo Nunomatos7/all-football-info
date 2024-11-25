@@ -11,7 +11,7 @@ const sortMatches = (matches) => {
 };
 
 const Home = () => {
-  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39)
+  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39) as default
   const scrollContainerRef = useRef(null);
   const divisoryRef = useRef(null);
 
@@ -53,7 +53,7 @@ const Home = () => {
       <HeroSection>
         <HeroContent>
           <h1>Your Gateway to Football Insights</h1>
-          <p>Real-time scores, upcoming matches, and the pulse of the game.</p>
+          <p>Previous scores, upcoming matches, and the pulse of the game.</p>
         </HeroContent>
       </HeroSection>
       <MatchesSection>
@@ -334,6 +334,7 @@ const Score = styled.div`
 
 const ModalTitle = styled.h2`
   text-align: left;
+  margin-top: 0px;
   
 `;
 
@@ -387,6 +388,7 @@ const Scores = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  margin: 20px 0;
   border-radius: 5px;
   border: 2px solid #000;
 `;
