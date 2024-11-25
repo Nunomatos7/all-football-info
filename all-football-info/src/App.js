@@ -7,9 +7,12 @@ import Home from "./pages/Home";
 import Teams from "./pages/Teams";
 import TeamDetail from "./pages/TeamDetail";
 import NavigationMenu from "./components/NavigationMenu";
+import LeagueStandings from "./pages/LeagueStandings";
+import LeagueSelectorModal from "./components/LeagueSelectorModal";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
@@ -20,7 +23,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/teams/:id" element={<TeamDetail />} />
+          <Route path="/standings" element={<LeagueStandings />} />
         </Routes>
+        <LeagueSelectorModal
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+        />
       </Router>
     </ThemeProvider>
   );

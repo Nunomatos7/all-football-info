@@ -1,22 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import GameDetailsModal from "../components/GameDetailsModal";
-import { useGetMatchesQuery } from "../api/footballApi";
+import { useGetMatchesQuery, useGetLeaguesQuery } from "../api/footballApi";
+import { useSelector } from "react-redux";
+import LeagueSelectorModal from "../components/LeagueSelectorModal";
 
-// Sort matches by date
-const sortMatches = (matches) => {
-  return [...matches].sort(
-    (a, b) => new Date(a.fixture.date) - new Date(b.fixture.date)
-  );
-};
 
 const Home = () => {
-  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39) as default
+  const { selectedLeague } = useSelector((state) => state.league);
+  const { data, error, isLoading } = useGetMatchesQuery(selectedLeague);
+  const { data: leagueData, isLoading: isLeagueLoading } = useGetLeaguesQuery();
   const scrollContainerRef = useRef(null);
   const divisoryRef = useRef(null);
-
+  const [isLeagueModalOpen, setIsLeagueModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState(null);
+  const [filter, setFilter] = useState("All"); // Filter state
+
+  // Sort matches by date
+  const sortMatches = (matches) => {
+    return [...matches].sort(
+      (a, b) => new Date(a.fixture.date) - new Date(b.fixture.date)
+    );
+  };
 
   useEffect(() => {
     if (scrollContainerRef.current && divisoryRef.current) {
@@ -24,29 +30,39 @@ const Home = () => {
     }
   }, [data]);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading matches</p>;
+  if (isLoading) return <Loading>Loading...</ Loading>;
+  if (error) return <Error>Error loading matches</ Error>;
 
   const matches = data?.response || [];
   const today = new Date();
 
-  // Sort matches and find the divisory index
   const sortedMatches = sortMatches(matches);
   const divisoryIndex = sortedMatches.findIndex(
     (match) => new Date(match.fixture.date) >= today
   );
 
-  // Open modal with match details
   const handleMatchClick = (match) => {
     setSelectedMatch(match);
     setIsModalOpen(true);
   };
 
-  // Close modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedMatch(null);
   };
+
+  // Get the selected league's logo
+  const selectedLeagueDetails = leagueData?.response?.find(
+    (league) => league.league.id === selectedLeague
+  );
+  const leagueLogo = selectedLeagueDetails?.league?.logo;
+
+  const filteredMatches = sortedMatches.filter((match) => {
+    if (filter === "All") return true;
+    if (filter === "Finished") return match.fixture.status.short === "FT"; // Finished
+    if (filter === "Scheduled") return match.fixture.status.short === "NS"; // Scheduled
+    return true;
+  });
 
   return (
     <HomeContainer>
@@ -56,10 +72,23 @@ const Home = () => {
           <p>Previous scores, upcoming matches, and the pulse of the game.</p>
         </HeroContent>
       </HeroSection>
+      <Filter>
+        <FilterContainer>
+          <FilterDropdown
+            id="matchFilter"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="All">All</option>
+            <option value="Finished">Finished</option>
+            <option value="Scheduled">Scheduled</option>
+          </FilterDropdown> 
+        </FilterContainer>
+        <h2>Matches</h2>
+      </Filter>
       <MatchesSection>
-        <h2>All Matches</h2>
         <MatchesScroll ref={scrollContainerRef}>
-          {sortedMatches.map((match, index) => (
+          {filteredMatches.map((match, index) => (
             <MatchCard
               key={match.fixture.id}
               onClick={() => handleMatchClick(match)}
@@ -93,6 +122,20 @@ const Home = () => {
           </ResetButton>
         </CenteredButton>
       </MatchesSection>
+
+      <FloatingButton onClick={() => setIsLeagueModalOpen(true)}>
+        {isLeagueLoading ? (
+          "⚽"
+        ) : leagueLogo ? (
+          <img src={leagueLogo} alt="Selected League" />
+        ) : (
+          "⚽"
+        )}
+      </FloatingButton>
+      <LeagueSelectorModal
+        isOpen={isLeagueModalOpen}
+        onClose={() => setIsLeagueModalOpen(false)}
+      />
 
       {/* Match Details Modal */}
       <GameDetailsModal isOpen={isModalOpen} onClose={handleCloseModal}>
@@ -170,7 +213,6 @@ const Home = () => {
   );
 };
 
-// Styled Components
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -181,6 +223,85 @@ const fadeIn = keyframes`
     transform: translateY(0);
   }
 `;
+
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+
+const Filter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px 0px 0px;
+  font-size: 1.5rem;
+  animation: ${fadeIn} 0.5s ease-in-out;
+
+  h2 {
+    margin: 0px;
+    padding-left: 10px;
+  }
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px;
+`;
+
+const FilterDropdown = styled.select`
+  padding: 10px;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  border: none;
+  background: white;
+  color: black;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border: 2px solid #0056b3;
+  }
+`;
+
+const FloatingButton = styled.button`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+
+  &:hover {
+    background: #0056b3;
+    transform: scale(1.1);
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+  }
+`;
+
 
 const HomeContainer = styled.div`
   display: flex;
@@ -391,6 +512,43 @@ const Scores = styled.div`
   margin: 20px 0;
   border-radius: 5px;
   border: 2px solid #000;
+`;
+
+const Loading = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #ff7bff;
+  font-weight: bold;
+  animation: ${spin} 1s infinite linear;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  @keyframes ${spin} {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const Error = styled.div`
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #ff0000;
+  font-weight: bold;
 `;
 
 export default Home;
