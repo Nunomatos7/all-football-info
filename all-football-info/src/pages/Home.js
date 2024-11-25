@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import GameDetailsModal from "../components/GameDetailsModal";
 import { useGetMatchesQuery } from "../api/footballApi";
 
 // Sort matches by date
@@ -10,13 +11,15 @@ const sortMatches = (matches) => {
 };
 
 const Home = () => {
-  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39) by default
+  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39)
   const scrollContainerRef = useRef(null);
   const divisoryRef = useRef(null);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMatch, setSelectedMatch] = useState(null);
+
   useEffect(() => {
     if (scrollContainerRef.current && divisoryRef.current) {
-      // Scroll to the divisory point on load
       divisoryRef.current.scrollIntoView({ behavior: "smooth", inline: "center" });
     }
   }, [data]);
@@ -24,7 +27,7 @@ const Home = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading matches</p>;
 
-  const matches = data?.response || []; // Fallback if data is undefined
+  const matches = data?.response || [];
   const today = new Date();
 
   // Sort matches and find the divisory index
@@ -33,9 +36,16 @@ const Home = () => {
     (match) => new Date(match.fixture.date) >= today
   );
 
-  // Scroll to the divisory point when the button is clicked
-  const handleResetScroll = () => {
-    divisoryRef.current?.scrollIntoView({ behavior: "smooth", inline: "center" });
+  // Open modal with match details
+  const handleMatchClick = (match) => {
+    setSelectedMatch(match);
+    setIsModalOpen(true);
+  };
+
+  // Close modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMatch(null);
   };
 
   return (
@@ -52,42 +62,113 @@ const Home = () => {
           {sortedMatches.map((match, index) => (
             <MatchCard
               key={match.fixture.id}
-              match={match}
+              onClick={() => handleMatchClick(match)}
               ref={index === divisoryIndex ? divisoryRef : null}
-            />
+            >
+              <TeamLogo src={match.teams.home.logo} alt={match.teams.home.name} />
+              <MatchDetails>
+                <strong>{match.teams.home.name}</strong>
+                <span>vs</span>
+                <strong>{match.teams.away.name}</strong>
+                <small>
+                  {new Date(match.fixture.date).toLocaleDateString("en-GB")} -{" "}
+                  {new Date(match.fixture.date).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </small>
+                {new Date(match.fixture.date) < today && (
+                  <Score>
+                    {match.score.fulltime.home} : {match.score.fulltime.away}
+                  </Score>
+                )}
+              </MatchDetails>
+              <TeamLogo src={match.teams.away.logo} alt={match.teams.away.name} />
+            </MatchCard>
           ))}
         </MatchesScroll>
         <CenteredButton>
-          <ResetButton onClick={handleResetScroll}>Return to Today</ResetButton>
+          <ResetButton onClick={() => divisoryRef.current?.scrollIntoView({ behavior: "smooth", inline: "center" })}>
+            Return to Today
+          </ResetButton>
         </CenteredButton>
       </MatchesSection>
+
+      {/* Match Details Modal */}
+      <GameDetailsModal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {selectedMatch && (
+          <>
+            <ModalTitle>
+              <h3>Match Details</h3>
+            </ModalTitle>
+            <ModalHeader>
+              <img
+                src={selectedMatch.league.logo}
+                alt={selectedMatch.league.name}
+                style={{ width: "50px", height: "50px" }}
+              />
+              <h2>{selectedMatch.league.name}</h2>
+            </ModalHeader>
+            <ModalTeams>
+              <div>
+                <img
+                  src={selectedMatch.teams.home.logo}
+                  alt={selectedMatch.teams.home.name}
+                  style={{ width: "60px", height: "60px" }}
+                />
+                <strong>{selectedMatch.teams.home.name}</strong>
+              </div>
+              <span>vs</span>
+              <div>
+                <img
+                  src={selectedMatch.teams.away.logo}
+                  alt={selectedMatch.teams.away.name}
+                  style={{ width: "60px", height: "60px" }}
+                />
+                <strong>{selectedMatch.teams.away.name}</strong>
+              </div>
+            </ModalTeams>
+            <ModalDetails>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(selectedMatch.fixture.date).toLocaleDateString("en-GB")}
+              </p>
+              <p>
+                <strong>Time:</strong>{" "}
+                {new Date(selectedMatch.fixture.date).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+              <p>
+                <strong>Venue:</strong> {selectedMatch.fixture.venue.name},{" "}
+                {selectedMatch.fixture.venue.city}
+              </p>
+              <p>
+                <strong>Referee:</strong>{" "}
+                {selectedMatch.fixture.referee || "Not assigned"}
+              </p>
+              {new Date(selectedMatch.fixture.date) < today && (
+                <Scores>
+                  <p>
+                    <strong>Halftime:</strong>{" "}
+                    {selectedMatch.score.halftime.home} -{" "}
+                    {selectedMatch.score.halftime.away}
+                  </p>
+                  <p>
+                    <strong>Fulltime:</strong>{" "}
+                    {selectedMatch.score.fulltime.home} -{" "}
+                    {selectedMatch.score.fulltime.away}
+                  </p>
+                </Scores>
+              )}
+            </ModalDetails>
+          </>
+        )}
+      </GameDetailsModal>
     </HomeContainer>
   );
 };
-
-const MatchCard = React.forwardRef(({ match }, ref) => (
-  <MatchCardContainer ref={ref}>
-    <TeamLogo src={match.teams.home.logo} alt={match.teams.home.name} />
-    <MatchDetails>
-      <strong>{match.teams.home.name}</strong>
-      <span>vs</span>
-      <strong>{match.teams.away.name}</strong>
-      <small>
-        {new Date(match.fixture.date).toLocaleDateString("en-GB")} -{" "}
-        {new Date(match.fixture.date).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </small>
-      {new Date(match.fixture.date) < new Date() && (
-        <Score>
-          {match.score.fulltime.home} : {match.score.fulltime.away}
-        </Score>
-      )}
-    </MatchDetails>
-    <TeamLogo src={match.teams.away.logo} alt={match.teams.away.name} />
-  </MatchCardContainer>
-));
 
 // Styled Components
 const fadeIn = keyframes`
@@ -164,7 +245,7 @@ const MatchesScroll = styled.div`
   }
 `;
 
-const MatchCardContainer = styled.div`
+const MatchCard = styled.div`
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   backdrop-filter: blur(10px);
@@ -210,12 +291,6 @@ const MatchDetails = styled.div`
   }
 `;
 
-const Score = styled.div`
-  margin-top: 5px;
-  font-size: 1rem;
-  color: #ffd700;
-`;
-
 const TeamLogo = styled.img`
   width: 50px;
   height: 50px;
@@ -245,6 +320,75 @@ const ResetButton = styled.button`
     transform: scale(1.1);
     background: #0056b3;
   }
+`;
+
+const Score = styled.div`
+  margin-top: 5px;
+  font-size: 1rem;
+  color: #ffd700;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 2px solid #ffd700;
+  padding: 5px 10px;
+`;
+
+const ModalTitle = styled.h2`
+  text-align: left;
+  
+`;
+
+const ModalHeader = styled.div`
+  text-align: center;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+`;
+
+const ModalTeams = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+
+  div {
+    text-align: center;
+
+    img {
+      margin: 0 auto;
+    }
+
+    strong {
+      display: block;
+      margin-top: 5px;
+    }
+  }
+
+  span {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+`;
+
+const ModalDetails = styled.div`
+  text-align: center;
+
+  p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+`;
+
+const Scores = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px solid #000;
 `;
 
 export default Home;
