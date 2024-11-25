@@ -1,45 +1,47 @@
 import React, { useState } from "react";
-import { useGetTeamsQuery } from "../api/footballApi"; // Using RTK Query
+import { useNavigate } from "react-router-dom";
+import { useGetTeamsQuery } from "../api/footballApi";
 import styled, { keyframes } from "styled-components";
 
 const Teams = () => {
-  const { data, error, isLoading } = useGetTeamsQuery("39"); // Fetch teams for Premier League
+  const { data, error, isLoading } = useGetTeamsQuery("39"); // Fetch teams for the Premier League (ID: 39) as default
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading teams</p>;
+  const teams = data?.response || []; // Fallback if no teams are available
 
-  const teams = data?.response || []; // Fallback in case data is undefined
-
-  // Filter teams based on search input
   const filteredTeams = teams.filter((team) =>
     team.team.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  if (isLoading) return <Loading>Loading teams...</Loading>;
+  if (error) return <Loading>Error fetching teams</Loading>;
+
   return (
-    <>
-      <TeamsContainer>
-        <Header>
-          <h1>Explore Teams</h1>
-          <SearchInput
-            type="text"
-            placeholder="Search teams..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Header>
-        <TeamsGrid>
-          {filteredTeams.map(({ team }) => (
-            <TeamCard key={team.id}>
-              <LogoContainer>
-                <img src={team.logo} alt={`${team.name} Logo`} />
-              </LogoContainer>
-              <TeamName>{team.name}</TeamName>
-            </TeamCard>
-          ))}
-        </TeamsGrid>
-      </TeamsContainer>
-    </>
+    <TeamsContainer>
+      <Header>
+        <h1>Explore Teams</h1>
+        <SearchInput
+          type="text"
+          placeholder="Search teams..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </Header>
+      <TeamsGrid>
+        {filteredTeams.map(({ team }) => (
+          <TeamCard
+            key={team.id}
+            onClick={() => navigate(`/teams/${team.id}`)} // Navigate to TeamDetail on click
+          >
+            <LogoContainer>
+              <img src={team.logo} alt={`${team.name} Logo`} />
+            </LogoContainer>
+            <TeamName>{team.name}</TeamName>
+          </TeamCard>
+        ))}
+      </TeamsGrid>
+    </TeamsContainer>
   );
 };
 
@@ -56,7 +58,7 @@ const fadeIn = keyframes`
 `;
 
 const TeamsContainer = styled.div`
-  padding: 10px 20px 50px 20px;
+  padding: 20px 30px 50px 30px;
   text-align: center;
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
@@ -65,7 +67,6 @@ const TeamsContainer = styled.div`
 
 const Header = styled.div`
   margin-bottom: 30px;
-
   h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
@@ -110,8 +111,9 @@ const TeamCard = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  width: 220px;
-  height: 280px;
+  width: 220px; /* Fixed width */
+  height: 280px; /* Fixed height */
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-10px);
@@ -152,7 +154,14 @@ const TeamName = styled.div`
   color: #000000;
   background-color: #ffffff;
   width: 100%;
-  padding: 15px 0px 15px 0px;
+  padding: 15px;
+`;
+
+const Loading = styled.div`
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 50px;
+  color: #ffffff;
 `;
 
 export default Teams;

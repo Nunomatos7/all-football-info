@@ -11,7 +11,7 @@ const sortMatches = (matches) => {
 };
 
 const Home = () => {
-  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39)
+  const { data, error, isLoading } = useGetMatchesQuery("39"); // Premier League (ID: 39) as default
   const scrollContainerRef = useRef(null);
   const divisoryRef = useRef(null);
 
