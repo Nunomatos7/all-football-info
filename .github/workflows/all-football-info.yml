@@ -41,7 +41,7 @@ jobs:
 
       - name: Deploy Vercel
         if: github.ref == 'refs/heads/main'
-        working-directory: all-football-info
+        working-directory: all-football-info/all-football-info
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
