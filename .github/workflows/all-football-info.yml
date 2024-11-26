@@ -41,12 +41,11 @@ jobs:
 
       - name: Deploy Vercel
         if: github.ref == 'refs/heads/main'
-        working-directory: all-football-info
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-        run: npx vercel --prod --yes
+        run: npx vercel --prod --yes --token $VERCEL_TOKEN --debug
   notify:
     needs: [build]
     runs-on: ubuntu-latest
