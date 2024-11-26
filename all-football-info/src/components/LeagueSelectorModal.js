@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useDispatch } from "react-redux";
 import { setLeague } from "../redux/slices/leagueSlice";
