@@ -26,18 +26,22 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+        working-directory: all-football-info
 
       - name: Run Linter
         run: npm run lint
+        working-directory: all-football-info
 
       #- name: Run Tests
        # run: npm test
 
       - name: Build Project
         run: npm run build --if-present
+        working-directory: all-football-info
 
       - name: Deploy Vercel
         if: github.ref == 'refs/heads/main'
+        working-directory: all-football-info
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
