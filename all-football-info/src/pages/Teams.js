@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useGetTeamsQuery } from "../api/footballApi";
 import styled, { keyframes } from "styled-components";
+import LeagueSelectorModal from "../components/LeagueSelectorModal";
 
 const Teams = () => {
-  const { data, error, isLoading } = useGetTeamsQuery("39"); // Fetch teams for the Premier League (ID: 39) as default
+  const { selectedLeague } = useSelector((state) => state.league); // Get selected league from Redux
+  const { data, error, isLoading } = useGetTeamsQuery(selectedLeague); // Fetch teams for selected league
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-
+  const [isLeagueModalOpen, setIsLeagueModalOpen] = useState(false); // State for league selector modal
   const teams = data?.response || []; // Fallback if no teams are available
 
   const filteredTeams = teams.filter((team) =>
@@ -32,7 +35,7 @@ const Teams = () => {
         {filteredTeams.map(({ team }) => (
           <TeamCard
             key={team.id}
-            onClick={() => navigate(`/teams/${team.id}`)} // Navigate to TeamDetail on click
+            onClick={() => navigate(`/teams/${team.id}`)}
           >
             <LogoContainer>
               <img src={team.logo} alt={`${team.name} Logo`} />
@@ -41,7 +44,15 @@ const Teams = () => {
           </TeamCard>
         ))}
       </TeamsGrid>
+      
+      <FloatingButton onClick={() => setIsLeagueModalOpen(true)}>⚽</FloatingButton>
+      <LeagueSelectorModal
+        isOpen={isLeagueModalOpen}
+        onClose={() => setIsLeagueModalOpen(false)}
+      />
+
     </TeamsContainer>
+    
   );
 };
 
@@ -54,6 +65,28 @@ const fadeIn = keyframes`
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+`;
+
+const FloatingButton = styled.button`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+
+  &:hover {
+    background: #0056b3;
+    transform: scale(1.1);
   }
 `;
 
@@ -132,11 +165,6 @@ const LogoContainer = styled.div`
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #ffffff;
-
-  &:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
 
   img {
     width: 80px;

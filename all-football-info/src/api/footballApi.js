@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import process from 'process';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -23,7 +22,19 @@ export const footballApi = createApi({
     getTeamDetails: builder.query({
       query: (teamId) => `/players/squads?team=${teamId}`,
     }),
+    getStandings: builder.query({
+      query: (leagueId) => `/standings?league=${leagueId}&season=2024`,
+    }),
+    getLeagues: builder.query({
+      query: () => `/leagues`, // Fetch all leagues
+    }),
   }),
 });
 
-export const { useGetMatchesQuery, useGetTeamsQuery, useGetTeamDetailsQuery } = footballApi;
+export const {
+  useGetMatchesQuery,
+  useGetTeamsQuery,
+  useGetTeamDetailsQuery,
+  useGetStandingsQuery,
+  useGetLeaguesQuery, // Export the new query hook
+} = footballApi;
