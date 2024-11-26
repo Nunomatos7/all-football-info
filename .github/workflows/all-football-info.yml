@@ -46,7 +46,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-        run: npx vercel --prod --yes $VERCEL_TOKEN
+        run: npx vercel --prod --yes
   notify:
     needs: [build]
     runs-on: ubuntu-latest
