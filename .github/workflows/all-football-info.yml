@@ -1,0 +1,55 @@
+name: all-football-info
+
+on:
+  push:
+    # branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linter
+        run: npm run lint
+
+      #- name: Run Tests
+       # run: npm test
+
+      - name: Build Project
+        run: npm run build --if-present
+
+      - name: Deploy Vercel
+        if: github.ref == 'refs/heads/main'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: npx vercel --prod --confirm --token $VERCEL_TOKEN
+  notify:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Myself in Teams
+        if: failure() || success()
+        run: |
+          curl -H "Content-Type: application/json" -d '{
+            "message": "CI Build Result: '${{ job.status }}' on branch '${{ github.ref }}'. View details here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }' "https://prod-140.westeurope.logic.azure.com:443/workflows/6f0e69eda2e7487999064344929457c0/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2tp5Q_vk21BUERBJWzDJw62hNP5HntaKBHPULaiUxkc"
