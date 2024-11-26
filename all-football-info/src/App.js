@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "./styles/theme";
+import { lightTheme } from "./styles/theme";
 import GlobalStyles from "./styles/GlobalStyles";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
