@@ -11,11 +11,10 @@ import LeagueStandings from "./pages/LeagueStandings";
 import LeagueSelectorModal from "./components/LeagueSelectorModal";
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
 
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
       <Router>
         <NavigationMenu />
