@@ -78,28 +78,6 @@ const StandingsContainer = styled.div`
   padding: 20px;
 `;
 
-const FloatingButton = styled.button`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 1.5rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  z-index: 1000;
-
-  &:hover {
-    background: #0056b3;
-    transform: scale(1.1);
-  }
-`;
-
 const HeaderSection = styled.div`
   text-align: center;
   margin-bottom: 30px;

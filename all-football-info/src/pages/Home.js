@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import GameDetailsModal from "../components/GameDetailsModal";
-import { useGetMatchesQuery, useGetLeaguesQuery } from "../api/footballApi";
+import { useGetMatchesQuery } from "../api/footballApi";
 import { useSelector } from "react-redux";
 import LeagueSelectorModal from "../components/LeagueSelectorModal";
 import FloatingLeagueButton from "../components/FloatingLeagueButton";
@@ -9,7 +9,6 @@ import FloatingLeagueButton from "../components/FloatingLeagueButton";
 const Home = () => {
   const { selectedLeague } = useSelector((state) => state.league);
   const { data, error, isLoading } = useGetMatchesQuery(selectedLeague);
-  const { data: leagueData, isLoading: isLeagueLoading } = useGetLeaguesQuery();
   const scrollContainerRef = useRef(null);
   const divisoryRef = useRef(null);
   const [isLeagueModalOpen, setIsLeagueModalOpen] = useState(false);
@@ -50,12 +49,6 @@ const Home = () => {
     setIsModalOpen(false);
     setSelectedMatch(null);
   };
-
-  // Get the selected league's logo
-  const selectedLeagueDetails = leagueData?.response?.find(
-    (league) => league.league.id === selectedLeague
-  );
-  const leagueLogo = selectedLeagueDetails?.league?.logo;
 
   const filteredMatches = sortedMatches.filter((match) => {
     if (filter === "All") return true;
