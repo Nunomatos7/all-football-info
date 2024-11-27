@@ -4,7 +4,7 @@ import GameDetailsModal from "../components/GameDetailsModal";
 import { useGetMatchesQuery, useGetLeaguesQuery } from "../api/footballApi";
 import { useSelector } from "react-redux";
 import LeagueSelectorModal from "../components/LeagueSelectorModal";
-
+import FloatingLeagueButton from "../components/FloatingLeagueButton";
 
 const Home = () => {
   const { selectedLeague } = useSelector((state) => state.league);
@@ -123,15 +123,7 @@ const Home = () => {
         </CenteredButton>
       </MatchesSection>
 
-      <FloatingButton onClick={() => setIsLeagueModalOpen(true)}>
-        {isLeagueLoading ? (
-          "⚽"
-        ) : leagueLogo ? (
-          <img src={leagueLogo} alt="Selected League" />
-        ) : (
-          "⚽"
-        )}
-      </FloatingButton>
+      <FloatingLeagueButton />
       <LeagueSelectorModal
         isOpen={isLeagueModalOpen}
         onClose={() => setIsLeagueModalOpen(false)}
@@ -270,38 +262,6 @@ const FilterDropdown = styled.select`
     border: 2px solid #0056b3;
   }
 `;
-
-const FloatingButton = styled.button`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #fff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  z-index: 1000;
-
-  &:hover {
-    background: #0056b3;
-    transform: scale(1.1);
-  }
-
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: contain;
-  }
-`;
-
 
 const HomeContainer = styled.div`
   display: flex;

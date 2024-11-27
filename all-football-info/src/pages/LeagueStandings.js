@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useGetStandingsQuery } from "../api/footballApi";
 import styled from "styled-components";
 import LeagueSelectorModal from "../components/LeagueSelectorModal";
+import FloatingLeagueButton from "../components/FloatingLeagueButton";
 
 const LeagueStandings = () => {
   const { selectedLeague } = useSelector((state) => state.league); // Get selected league from Redux
@@ -58,7 +59,7 @@ const LeagueStandings = () => {
         )}
       </StandingsContainer>
       
-      <FloatingButton onClick={() => setIsLeagueModalOpen(true)}>⚽</FloatingButton>
+      <FloatingLeagueButton />
       <LeagueSelectorModal
         isOpen={isLeagueModalOpen}
         onClose={() => setIsLeagueModalOpen(false)}
