@@ -5,6 +5,7 @@ import { useGetMatchesQuery } from "../api/footballApi";
 import { useSelector } from "react-redux";
 import LeagueSelectorModal from "../components/LeagueSelectorModal";
 import FloatingLeagueButton from "../components/FloatingLeagueButton";
+import logo from "../assets/images/logo.jpg";
 
 const Home = () => {
   const { selectedLeague } = useSelector((state) => state.league);
@@ -53,12 +54,21 @@ const Home = () => {
 
   return (
     <HomeContainer>
+      <LogoContainer>
+        <img src={logo} alt="App Logo" />
+        <TextContainer>
+          <AppName>OffsideZone</AppName>
+          <Slogan>Stay Ahead of the Game.</Slogan>
+        </TextContainer>
+      </LogoContainer>
+
       <HeroSection>
         <HeroContent>
           <h1>Your Gateway to Football Insights</h1>
           <p>Previous scores, upcoming matches, and the pulse of the game.</p>
         </HeroContent>
       </HeroSection>
+      
       <Filter>
         <FilterContainer>
           <FilterDropdown
@@ -225,6 +235,7 @@ const spin = keyframes`
 `;
 
 const HomeContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -233,6 +244,48 @@ const HomeContainer = styled.div`
   min-height: 100vh;
   overflow: hidden;
 `;
+
+const LogoContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+
+  img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+`;
+
+const AppName = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+`;
+
+const Slogan = styled.p`
+  font-size: 0.8rem;
+  color: #d0d0d0;
+  margin: 0;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+`;
+
 
 const LoadingWrapper = styled.div`
   display: flex;
@@ -261,7 +314,7 @@ const HeroSection = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 50px 20px 0px 20px;
+  padding: 100px 20px 0px 20px;
   background: linear-gradient(180deg, #001f3f, transparent);
   width: 100%;
 `;
