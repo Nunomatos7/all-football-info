@@ -9,6 +9,7 @@ import TeamDetail from "./pages/TeamDetail";
 import NavigationMenu from "./components/NavigationMenu";
 import LeagueStandings from "./pages/LeagueStandings";
 import LeagueSelectorModal from "./components/LeagueSelectorModal";
+import PlayerComparison from "./pages/PlayerComparison";
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/teams/:id" element={<TeamDetail />} />
+          <Route path="/playercomparison" element={<PlayerComparison />} />
           <Route path="/standings" element={<LeagueStandings />} />
         </Routes>
         <LeagueSelectorModal

@@ -20,13 +20,19 @@ export const footballApi = createApi({
       query: (leagueId) => `/teams?league=${leagueId}&season=2024`,
     }),
     getTeamDetails: builder.query({
-      query: (teamId) => `/players/squads?team=${teamId}`,
+      query: (teamId) => `/players/squads?team=${teamId}`, // Get full squad for a team
     }),
     getStandings: builder.query({
       query: (leagueId) => `/standings?league=${leagueId}&season=2024`,
     }),
     getLeagues: builder.query({
       query: () => `/leagues`, // Fetch all leagues
+    }),
+    getPlayers: builder.query({
+      query: (teamId) => `/players?team=${teamId}&season=2024`, // Fetch players for a team
+    }),
+    getPlayerStats: builder.query({
+      query: ({ playerId, season }) => `/players?id=${playerId}&season=${season}`,
     }),
   }),
 });
@@ -36,5 +42,7 @@ export const {
   useGetTeamsQuery,
   useGetTeamDetailsQuery,
   useGetStandingsQuery,
-  useGetLeaguesQuery, // Export the new query hook
+  useGetLeaguesQuery,
+  useGetPlayersQuery, // New hook for fetching players
+  useGetPlayerStatsQuery,
 } = footballApi;
