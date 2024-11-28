@@ -32,6 +32,10 @@ const NavigationMenu = () => {
             <FaTrophy size={24} />
             <span>Standings</span>
           </MenuItem>
+          <MenuItem onClick={() => handleNavigate("/playercomparison")}>
+            <FaUsers size={34} />
+            <span>Players Comparison</span>
+          </MenuItem>
           <MenuItem onClick={() => handleNavigate("/about")}>
             <FaInfoCircle size={24} />
             <span>About</span>
