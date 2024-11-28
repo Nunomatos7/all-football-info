@@ -14,23 +14,17 @@ const Home = () => {
   const [isLeagueModalOpen, setIsLeagueModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState(null);
-  const [filter, setFilter] = useState("All"); // Filter state
+  const [filter, setFilter] = useState("All");
 
   // Sort matches by date
-  const sortMatches = (matches) => {
-    return [...matches].sort(
-      (a, b) => new Date(a.fixture.date) - new Date(b.fixture.date)
-    );
-  };
+  const sortMatches = (matches) =>
+    [...matches].sort((a, b) => new Date(a.fixture.date) - new Date(b.fixture.date));
 
   useEffect(() => {
     if (scrollContainerRef.current && divisoryRef.current) {
       divisoryRef.current.scrollIntoView({ behavior: "smooth", inline: "center" });
     }
   }, [data]);
-
-  if (isLoading) return <Loading>Loading...</ Loading>;
-  if (error) return <Error>Error loading matches</ Error>;
 
   const matches = data?.response || [];
   const today = new Date();
@@ -52,8 +46,8 @@ const Home = () => {
 
   const filteredMatches = sortedMatches.filter((match) => {
     if (filter === "All") return true;
-    if (filter === "Finished") return match.fixture.status.short === "FT"; // Finished
-    if (filter === "Scheduled") return match.fixture.status.short === "NS"; // Scheduled
+    if (filter === "Finished") return match.fixture.status.short === "FT";
+    if (filter === "Scheduled") return match.fixture.status.short === "NS";
     return true;
   });
 
@@ -75,40 +69,50 @@ const Home = () => {
             <option value="All">All</option>
             <option value="Finished">Finished</option>
             <option value="Scheduled">Scheduled</option>
-          </FilterDropdown> 
+          </FilterDropdown>
         </FilterContainer>
         <h2>Matches</h2>
       </Filter>
       <MatchesSection>
-        <MatchesScroll ref={scrollContainerRef}>
-          {filteredMatches.map((match, index) => (
-            <MatchCard
-              key={match.fixture.id}
-              onClick={() => handleMatchClick(match)}
-              ref={index === divisoryIndex ? divisoryRef : null}
-            >
-              <TeamLogo src={match.teams.home.logo} alt={match.teams.home.name} />
-              <MatchDetails>
-                <strong>{match.teams.home.name}</strong>
-                <span>vs</span>
-                <strong>{match.teams.away.name}</strong>
-                <small>
-                  {new Date(match.fixture.date).toLocaleDateString("en-GB")} -{" "}
-                  {new Date(match.fixture.date).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </small>
-                {new Date(match.fixture.date) < today && (
-                  <Score>
-                    {match.score.fulltime.home} : {match.score.fulltime.away}
-                  </Score>
-                )}
-              </MatchDetails>
-              <TeamLogo src={match.teams.away.logo} alt={match.teams.away.name} />
-            </MatchCard>
-          ))}
-        </MatchesScroll>
+        {isLoading ? (
+          <LoadingWrapper>
+            <LoadingSpinner />
+            <LoadingText>Fetching Matches...</LoadingText>
+          </LoadingWrapper>
+        ) : error ? (
+          <Error>Error loading matches</Error>
+        ) : (
+          <MatchesScroll ref={scrollContainerRef}>
+            {filteredMatches.map((match, index) => (
+              <MatchCard
+                key={match.fixture.id}
+                onClick={() => handleMatchClick(match)}
+                ref={index === divisoryIndex ? divisoryRef : null}
+              >
+                <TeamLogo src={match.teams.home.logo} alt={match.teams.home.name} />
+                <MatchDetails>
+                  <strong>{match.teams.home.name}</strong>
+                  <span>vs</span>
+                  <strong>{match.teams.away.name}</strong>
+                  <small>
+                    {new Date(match.fixture.date).toLocaleDateString("en-GB")} -{" "}
+                    {new Date(match.fixture.date).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </small>
+                  {new Date(match.fixture.date) < today && (
+                    <Score>
+                      {match.score.fulltime.home} : {match.score.fulltime.away}
+                    </Score>
+                  )}
+                </MatchDetails>
+                <TeamLogo src={match.teams.away.logo} alt={match.teams.away.name} />
+              </MatchCard>
+            ))}
+          </MatchesScroll>
+          
+        )}
         <CenteredButton>
           <ResetButton onClick={() => divisoryRef.current?.scrollIntoView({ behavior: "smooth", inline: "center" })}>
             Return to Today
@@ -121,8 +125,6 @@ const Home = () => {
         isOpen={isLeagueModalOpen}
         onClose={() => setIsLeagueModalOpen(false)}
       />
-
-      {/* Match Details Modal */}
       <GameDetailsModal isOpen={isModalOpen} onClose={handleCloseModal}>
         {selectedMatch && (
           <>
@@ -198,6 +200,7 @@ const Home = () => {
   );
 };
 
+// Styled Components
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -210,49 +213,14 @@ const fadeIn = keyframes`
 `;
 
 const spin = keyframes`
-  from {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
     transform: rotate(360deg);
-  }
-`;
-
-
-const Filter = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0px 0px 0px;
-  font-size: 1.5rem;
-  animation: ${fadeIn} 0.5s ease-in-out;
-
-  h2 {
-    margin: 0px;
-    padding-left: 10px;
-  }
-`;
-
-const FilterContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0px;
-`;
-
-const FilterDropdown = styled.select`
-  padding: 10px;
-  font-size: 1.5rem;
-  border-radius: 5px;
-  border: none;
-  background: white;
-  color: black;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    border: 2px solid #0056b3;
   }
 `;
 
@@ -264,6 +232,28 @@ const HomeContainer = styled.div`
   color: #ffffff;
   min-height: 100vh;
   overflow: hidden;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+`;
+
+const LoadingSpinner = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ff7bff;
+  border-radius: 50%;
+  animation: ${spin} 1s linear infinite;
+`;
+
+const LoadingText = styled.p`
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ff7bff;
 `;
 
 const HeroSection = styled.div`
@@ -293,12 +283,6 @@ const HeroContent = styled.div`
 const MatchesSection = styled.div`
   width: 100%;
   padding: 20px;
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-    animation: ${fadeIn} 2s ease-in;
-  }
 `;
 
 const MatchesScroll = styled.div`
@@ -374,6 +358,43 @@ const TeamLogo = styled.img`
   padding: 5px;
 `;
 
+const Filter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px 0px 0px;
+  font-size: 1.5rem;
+  animation: ${fadeIn} 0.5s ease-in-out;
+
+  h2 {
+    margin: 0px;
+    padding-left: 10px;
+  }
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px;
+`;
+
+const FilterDropdown = styled.select`
+  padding: 10px;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  border: none;
+  background: white;
+  color: black;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border: 2px solid #0056b3;
+  }
+`;
+
 const CenteredButton = styled.div`
   display: flex;
   justify-content: center;
@@ -409,7 +430,6 @@ const Score = styled.div`
 const ModalTitle = styled.h2`
   text-align: left;
   margin-top: 0px;
-  
 `;
 
 const ModalHeader = styled.div`
@@ -465,35 +485,6 @@ const Scores = styled.div`
   margin: 20px 0;
   border-radius: 5px;
   border: 2px solid #000;
-`;
-
-const Loading = styled.div`
-  text-align: center;
-  font-size: 1.2rem;
-  color: #ff7bff;
-  font-weight: bold;
-  animation: ${spin} 1s infinite linear;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  @keyframes ${spin} {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-  }
 `;
 
 const Error = styled.div`
