@@ -60,7 +60,7 @@ const Home = () => {
       <LogoContainer  onClick={() => navigate("/")}>
         <img src={logo} alt="App Logo" />
         <TextContainer>
-          <AppName>OffsideZone</AppName>
+          <AppName>OfffsideZone</AppName>
           <Slogan>Stay Ahead of the Game.</Slogan>
         </TextContainer>
       </LogoContainer>

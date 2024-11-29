@@ -248,7 +248,6 @@ const AboutContainer = styled.div`
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
   min-height: 100vh;
-  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const Header = styled.div`
@@ -262,12 +261,12 @@ const LogoSection = styled.div`
   justify-content: center;
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: 30px;
   `;
 
 const LogoContainer = styled.div`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   img {
     width: 100%;
     height: 100%;
@@ -298,6 +297,7 @@ const Slogan = styled.p`
 const Section = styled.div`
   margin-bottom: 40px;
   text-align: left;
+  animation: ${fadeIn} 0.5s ease-in-out;
 
   h2 {
     font-size: 1.5rem;
