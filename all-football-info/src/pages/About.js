@@ -220,7 +220,13 @@ const About = () => {
             <strong>Challenge:</strong> When first load the page, having the selected league logo on the floatting button.
             <br />
             <strong>Solution:</strong> Try after try until I found the solution.
+          </li> 
+          <li>
+            <strong>Challenge:</strong> When open a team details page, the page is to heavy to load all player's pictures in big teams.
+            <br />
+            <strong>Try:</strong> I tried to implement a load more button but I didn't succeeded.
           </li>
+
         </ul>
       </Section>
 
