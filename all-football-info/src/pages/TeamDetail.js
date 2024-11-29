@@ -1,20 +1,28 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetTeamDetailsQuery } from "../api/footballApi";
+import { useGetTeamDetailsQuery } from "../api/footballApi"; // Existing API
+import { useGetTeamDetailsQuery as useGetAdditionalTeamDetailsQuery } from "../api/teamDetailsApi"; // New API
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineArrowLeft } from "react-icons/ai";  
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const TeamDetail = () => {
   const { id } = useParams();
-  const { data, error, isLoading } = useGetTeamDetailsQuery(id);
   const navigate = useNavigate();
 
-  if (isLoading) return <Loading>Loading team data...</Loading>;
+  // Fetch data from the existing API
+  const { data, error, isLoading } = useGetTeamDetailsQuery(id);
+
+  // Fetch additional data from the new API
+  const { data: additionalData, isLoading: isLoadingAdditional } =
+    useGetAdditionalTeamDetailsQuery(id);
+
+  if (isLoading || isLoadingAdditional) return <Loading>Loading team data...</Loading>;
   if (error || !data?.response?.[0])
     return <ErrorMessage>No data available for this team.</ErrorMessage>;
 
   const team = data.response[0];
+  const additionalTeamData = additionalData?.response?.[0] || {};
 
   return (
     <TeamContainer>
@@ -25,9 +33,15 @@ const TeamDetail = () => {
         </LogoContainer>
         <TeamInfo>
           <h1>{team.team.name}</h1>
-          <p><strong>Founded:</strong></p>
-          <p><strong>Stadium:</strong></p>
-          <p><strong>Country:</strong></p>
+          <p>
+            <strong>Founded:</strong> {additionalTeamData.team?.founded || "N/A"}
+          </p>
+          <p>
+            <strong>Stadium:</strong> {additionalTeamData.venue?.name || "N/A"}
+          </p>
+          <p>
+            <strong>Country:</strong> {additionalTeamData.team?.country || "N/A"}
+          </p>
         </TeamInfo>
       </Header>
       <PlayersSection>
@@ -73,7 +87,7 @@ const TeamContainer = styled.div`
 `;
 
 const BackButton = styled.button`
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
   background: #ff7bff;
@@ -86,6 +100,7 @@ const BackButton = styled.button`
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  z-index: 1000;
 
   &:hover {
     background: #ff49eb;

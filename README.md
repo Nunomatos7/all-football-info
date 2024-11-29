@@ -1,7 +1,7 @@
-
 ```
 all-football-info
 ├─ .dist
+├─ .vercel
 ├─ all-football-info
 │  ├─ .env
 │  ├─ package-lock.json
@@ -20,7 +20,11 @@ all-football-info
 │     ├─ App.css
 │     ├─ App.js
 │     ├─ App.test.js
+│     ├─ assets
+│     │  └─ images
+│     │     └─ logo.jpg
 │     ├─ components
+│     │  ├─ FloatingLeagueButton.js
 │     │  ├─ GameDetailsModal.js
 │     │  ├─ LeagueSelectorModal.js
 │     │  └─ NavigationMenu.js
@@ -31,6 +35,7 @@ all-football-info
 │     │  ├─ About.js
 │     │  ├─ Home.js
 │     │  ├─ LeagueStandings.js
+│     │  ├─ PlayerComparison.js
 │     │  ├─ TeamDetail.js
 │     │  └─ Teams.js
 │     ├─ redux
