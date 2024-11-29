@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetTeamDetailsQuery } from "../api/footballApi"; // Existing API
-import { useGetTeamDetailsQuery as useGetAdditionalTeamDetailsQuery } from "../api/teamDetailsApi"; // New API
+import { useGetTeamDetailsQuery } from "../api/footballApi";
+import { useGetTeamDetailsQuery as useGetAdditionalTeamDetailsQuery } from "../api/teamDetailsApi";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -68,6 +68,7 @@ const TeamDetail = () => {
   );
 };
 
+// Styled Components
 const fadeIn = keyframes`
   from {
     opacity: 0;

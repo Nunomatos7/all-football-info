@@ -79,6 +79,7 @@ const LeagueStandings = () => {
   );
 };
 
+// Styled Components
 const StandingsContainer = styled.div`
   display: flex;
   flex-direction: column;

@@ -46,6 +46,7 @@ const NavigationMenu = () => {
   );
 };
 
+// Styled Components
 const MenuContainer = styled.div`
   position: fixed;
   top: 20px;

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const GameDetailsModal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null; // Do not render if modal is not open
+  if (!isOpen) return null;
 
   return (
     <ModalOverlay>

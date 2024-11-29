@@ -29,7 +29,7 @@ const LeagueSelectorModal = ({ isOpen, onClose }) => {
 
   const handleLeagueSelect = (leagueId) => {
     dispatch(setLeague(leagueId)); // Update the selected league in Redux
-    onClose(); // Close the modal
+    onClose();
   };
 
   const filteredTopLeagues = topLeagues.filter((league) =>
@@ -40,8 +40,8 @@ const LeagueSelectorModal = ({ isOpen, onClose }) => {
     league.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (isLoading) return null; // Optionally show a loading spinner
-  if (error) return null; // Optionally handle errors here
+  if (isLoading) return null;
+  if (error) return null;
 
   return (
     <ModalContainer isOpen={isOpen}>
@@ -49,7 +49,6 @@ const LeagueSelectorModal = ({ isOpen, onClose }) => {
         <CloseButton onClick={onClose}>×</CloseButton>
         <h2>Select a League</h2>
 
-        {/* Search Bar */}
         <SearchBar
           type="text"
           placeholder="Search leagues..."
@@ -96,6 +95,7 @@ const LeagueSelectorModal = ({ isOpen, onClose }) => {
   );
 };
 
+// Styled Components
 const fadeIn = keyframes`
   from {
     opacity: 0;
