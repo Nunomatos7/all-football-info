@@ -29,7 +29,8 @@ all-football-info
 │     │  ├─ FloatingLeagueButton.js
 │     │  ├─ GameDetailsModal.js
 │     │  ├─ LeagueSelectorModal.js
-│     │  └─ NavigationMenu.js
+│     │  ├─ NavigationMenu.js
+│     │  └─ Technologies.js
 │     ├─ index.css
 │     ├─ index.js
 │     ├─ logo.svg

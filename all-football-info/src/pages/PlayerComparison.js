@@ -3,8 +3,8 @@ import Select from "react-select";
 import {
   useGetLeaguesQuery,
   useGetTeamsQuery,
-  useGetPlayersQuery,
   useGetPlayerStatsQuery,
+  useGetTeamDetailsQuery
 } from "../api/footballApi";
 import styled, { keyframes } from "styled-components";
 import logo from "../assets/images/logo.jpg";
@@ -23,9 +23,6 @@ const PlayerComparison = () => {
 
   const { data: leftTeamsData, isLoading: leftTeamsLoading } = useGetTeamsQuery(leftLeague?.value);
   const { data: rightTeamsData, isLoading: rightTeamsLoading } = useGetTeamsQuery(rightLeague?.value);
-
-  const { data: leftPlayersData, isLoading: leftPlayersLoading } = useGetPlayersQuery(leftTeam?.value);
-  const { data: rightPlayersData, isLoading: rightPlayersLoading } = useGetPlayersQuery(rightTeam?.value);
 
   const { data: leftStatsData } = useGetPlayerStatsQuery({
     playerId: leftPlayer?.value,
@@ -69,25 +66,19 @@ const PlayerComparison = () => {
     [rightTeamsData]
   );
 
-  const leftPlayerOptions = useMemo(
-    () =>
-      leftPlayersData?.response?.map(({ player }) => ({
-        value: player.id,
-        label: player.name,
-        photo: player.photo,
-      })),
-    [leftPlayersData]
-  );
+  const { data: leftTeamData, isLoading: leftPlayersLoading } = useGetTeamDetailsQuery(leftTeam?.value);
+  const leftPlayerOptions = leftTeamData?.response?.[0]?.players.map((player) => ({
+    value: player.id,
+    label: player.name,
+    photo: player.photo,
+  })) || [];
 
-  const rightPlayerOptions = useMemo(
-    () =>
-      rightPlayersData?.response?.map(({ player }) => ({
-        value: player.id,
-        label: player.name,
-        photo: player.photo,
-      })),
-    [rightPlayersData]
-  );
+  const { data: rightTeamData, isLoading: rightPlayersLoading } = useGetTeamDetailsQuery(rightTeam?.value);
+  const rightPlayerOptions = rightTeamData?.response?.[0]?.players.map((player) => ({
+    value: player.id,
+    label: player.name,
+    photo: player.photo,
+  })) || [];
 
   const handleLeftLeagueChange = (selectedLeague) => {
     setLeftLeague(selectedLeague);
@@ -98,6 +89,16 @@ const PlayerComparison = () => {
   const handleRightLeagueChange = (selectedLeague) => {
     setRightLeague(selectedLeague);
     setRightTeam(null);
+    setRightPlayer(null);
+  };
+
+  const handleLeftTeamChange = (selectedTeam) => {
+    setLeftTeam(selectedTeam);
+    setLeftPlayer(null);
+  };
+
+  const handleRightTeamChange = (selectedTeam) => {
+    setRightTeam(selectedTeam);
     setRightPlayer(null);
   };
 
@@ -175,7 +176,7 @@ const PlayerComparison = () => {
           <StyledSelect
             options={leftTeamOptions}
             value={leftTeam}
-            onChange={setLeftTeam}
+            onChange={handleLeftTeamChange}
             styles={customStyles}
             formatOptionLabel={formatOptionLabel}
             isDisabled={!leftLeague || leftTeamsLoading}
@@ -216,7 +217,7 @@ const PlayerComparison = () => {
           <StyledSelect
             options={rightTeamOptions}
             value={rightTeam}
-            onChange={setRightTeam}
+            onChange={handleRightTeamChange}
             styles={customStyles}
             formatOptionLabel={formatOptionLabel}
             isDisabled={!rightLeague || rightTeamsLoading}
