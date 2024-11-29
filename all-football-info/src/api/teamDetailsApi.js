@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const NEW_API_KEY = process.env.REACT_APP_NEW_API_KEY;
+
 export const teamDetailsApi = createApi({
   reducerPath: 'teamDetailsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://v3.football.api-sports.io',
     prepareHeaders: (headers) => {
-      headers.set('x-apisports-key', 'dc74f7d5a8c2a6455b09325dd17c2898');
+      headers.set('x-apisports-key', NEW_API_KEY);
       return headers;
     },
   }),

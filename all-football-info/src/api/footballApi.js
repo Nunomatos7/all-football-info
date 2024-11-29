@@ -43,6 +43,6 @@ export const {
   useGetTeamDetailsQuery,
   useGetStandingsQuery,
   useGetLeaguesQuery,
-  useGetPlayersQuery, // New hook for fetching players
+  useGetPlayersQuery,
   useGetPlayerStatsQuery,
 } = footballApi;

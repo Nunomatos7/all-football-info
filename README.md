@@ -1,3 +1,4 @@
+
 ```
 all-football-info
 ├─ .dist
@@ -16,7 +17,8 @@ all-football-info
 │  ├─ README.md
 │  └─ src
 │     ├─ api
-│     │  └─ footballApi.js
+│     │  ├─ footballApi.js
+│     │  └─ teamDetailsApi.js
 │     ├─ App.css
 │     ├─ App.js
 │     ├─ App.test.js
