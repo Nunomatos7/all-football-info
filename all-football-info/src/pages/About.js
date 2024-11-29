@@ -139,7 +139,7 @@ const About = () => {
         <h3>Pages</h3>
         <ul>
           <li>
-            <strong>Home:</strong> Landing page with league selection, team selection, and match search.
+            <strong>Home:</strong> Landing page with selected league's matches, filters and league selector.
           </li>
           <li>
             <strong>Teams:</strong> Displays team details for selected team.
@@ -214,6 +214,11 @@ const About = () => {
             <br />
             <strong>Solution:</strong> Go around and around till I found the solution.
           </li>
+          <li>
+            <strong>Challenge:</strong> When first load the page, having the selected league logo on the floatting button.
+            <br />
+            <strong>Solution:</strong> To be discovered.
+          </li>
         </ul>
       </Section>
 
@@ -224,6 +229,7 @@ const About = () => {
           football statistics platform. While the project meets its primary goals, there is room for future enhancements:
         </p>
         <ul>
+          <li>Show the selected league logo on the floating button when the page loads.</li>
           <li>Incorporating live updates for matches and player statistics.</li>
           <li>Adding advanced analytics and visualizations for deeper insights.</li>
           <li>Supporting user accounts for personalized experiences.</li>
