@@ -84,7 +84,7 @@ const Home = () => {
             <option value="Scheduled">Scheduled</option>
           </FilterDropdown>
         </FilterContainer>
-        <h2>Matches</h2>
+        <h2> 2024/2025 Matches</h2>
       </Filter>
       <MatchesSection>
         {isLoading ? (
