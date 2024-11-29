@@ -48,6 +48,16 @@ const Technologies = () => {
       logo: "https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=1200,height=1200,fit=cover,f=png/47092c406e4cdbb2c6a4376534757a00.png",
       color: "#37b358",
     },
+    {
+      name: "GitHub",
+      logo: "https://cdn-icons-png.flaticon.com/256/25/25231.png",
+      color: "#888888",
+    },
+    {
+      name: "Github Actions",
+      logo: "https://avatars.githubusercontent.com/u/44036562?s=280&v=4",
+      color: "#000000",
+    }
   ];
 
   return (

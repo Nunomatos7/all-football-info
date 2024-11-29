@@ -58,6 +58,12 @@ const About = () => {
             including league standings, team details, match data, and player comparisons. The application is built 
             with React, a popular JavaScript library for building user interfaces.
         </p>
+        <p>
+            The project is hosted on Vercel, a platform for static websites and serverless functions. Vercel provides an 
+            easy and cost-effective way to deploy and manage web applications, making it a popular choice for developers  
+            looking to host their projects online. I also used Github for version control and Github Actions for CI/CD, namely for receiving Microsoft Teams notifications.
+        </p>
+
       </Section>
 
       <Section>
@@ -296,7 +302,7 @@ const Slogan = styled.p`
 
 const Section = styled.div`
   margin-bottom: 40px;
-  text-align: left;
+  text-align: justify;
   animation: ${fadeIn} 0.5s ease-in-out;
 
   h2 {
