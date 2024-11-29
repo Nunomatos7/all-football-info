@@ -66,7 +66,7 @@ const fadeIn = keyframes`
 `;
 
 const TeamContainer = styled.div`
-  padding: 20px 30px 50px 30px;
+  padding: 70px 30px 50px 30px;
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
   min-height: 100vh;

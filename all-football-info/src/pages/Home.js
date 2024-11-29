@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import LeagueSelectorModal from "../components/LeagueSelectorModal";
 import FloatingLeagueButton from "../components/FloatingLeagueButton";
 import logo from "../assets/images/logo.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { selectedLeague } = useSelector((state) => state.league);
@@ -52,9 +53,11 @@ const Home = () => {
     return true;
   });
 
+  const navigate = useNavigate();
+
   return (
     <HomeContainer>
-      <LogoContainer>
+      <LogoContainer  onClick={() => navigate("/")}>
         <img src={logo} alt="App Logo" />
         <TextContainer>
           <AppName>OffsideZone</AppName>
@@ -248,11 +251,12 @@ const HomeContainer = styled.div`
 const LogoContainer = styled.div`
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: 30px;
   display: flex;
   align-items: center;
   gap: 10px;
   z-index: 1000;
+  cursor: pointer;
 
   img {
     width: 70px;

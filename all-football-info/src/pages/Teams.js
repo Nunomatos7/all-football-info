@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetTeamsQuery } from "../api/footballApi";
 import styled, { keyframes } from "styled-components";
 import FloatingLeagueButton from "../components/FloatingLeagueButton";
+import logo from "../assets/images/logo.jpg";
 
 const Teams = () => {
   const { selectedLeague } = useSelector((state) => state.league); // Get selected league from Redux
@@ -22,6 +23,13 @@ const Teams = () => {
 
   return (
     <TeamsContainer>
+      <AppLogoContainer onClick={() => navigate("/")}>
+        <img src={logo} alt="App Logo" />
+        <TextContainer>
+          <AppName>OffsideZone</AppName>
+          <Slogan>Stay Ahead of the Game.</Slogan>
+        </TextContainer>
+      </AppLogoContainer>
       <Header>
         <h1>Explore Teams</h1>
         <SearchInput
@@ -62,7 +70,7 @@ const fadeIn = keyframes`
 `;
 
 const TeamsContainer = styled.div`
-  padding: 20px;
+  padding: 100px 20px 20px 20px;
   text-align: center;
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
@@ -161,6 +169,48 @@ const Loading = styled.div`
   font-size: 1.5rem;
   padding: 50px;
   color: #ffffff;
+`;
+
+const AppLogoContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  cursor: pointer;
+
+  img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+`;
+
+const AppName = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+`;
+
+const Slogan = styled.p`
+  font-size: 0.8rem;
+  color: #d0d0d0;
+  margin: 0;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 `;
 
 export default Teams;
