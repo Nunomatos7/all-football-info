@@ -273,6 +273,10 @@ const TextContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 2px;
+
+  @media (max-width: 480px) {
+    opacity: 0;
+  }
 `;
 
 const AppName = styled.h1`
@@ -423,6 +427,10 @@ const Filter = styled.div`
   margin: 20px 0px 0px 0px;
   font-size: 1.5rem;
   animation: ${fadeIn} 0.5s ease-in-out;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 
   h2 {
     margin: 0px;

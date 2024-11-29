@@ -459,6 +459,10 @@ const TextContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 2px;
+
+  @media (max-width: 480px) {
+    opacity: 0;
+  }
 `;
 
 const AppName = styled.h1`

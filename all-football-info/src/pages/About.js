@@ -16,7 +16,9 @@ const About = () => {
             <Slogan>Stay Ahead of the Game.</Slogan>
           </TextContainer>
         </LogoSection>
-        <h1>Project Report</h1>
+        <HeaderTitle>
+          <h2>Project Report</h2>
+        </HeaderTitle>
       </Header>
 
       <Section>
@@ -260,10 +262,35 @@ const AboutContainer = styled.div`
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
   min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 50px 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 30px 10px;
+  }
 `;
 
 const Header = styled.div`
   margin-bottom: 50px;
+  }
+`;
+
+const HeaderTitle = styled.h2`
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  animation: ${fadeIn} 0.5s ease-in-out;
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+    margin-top: 60px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2rem;
+    margin-top: 80px;
+  }
 `;
 
 const LogoSection = styled.div`
@@ -292,6 +319,10 @@ const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+
+  @media (max-width: 480px) {
+    opacity: 0;
+  }
 `;
 
 const AppName = styled.h1`

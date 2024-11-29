@@ -84,6 +84,12 @@ const Header = styled.div`
     margin-bottom: 20px;
     animation: ${fadeIn} 1s ease-in;
   }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
 `;
 
 const SearchInput = styled.input`
@@ -98,6 +104,16 @@ const SearchInput = styled.input`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   outline: none;
   transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    max-width: 300px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    max-width: 200px;
+  }
 
   &:focus {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -181,6 +197,8 @@ const AppLogoContainer = styled.div`
   z-index: 1000;
   cursor: pointer;
 
+
+
   img {
     width: 70px;
     height: 70px;
@@ -196,6 +214,10 @@ const TextContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 2px;
+
+  @media (max-width: 480px) {
+    opacity: 0;
+  }
 `;
 
 const AppName = styled.h1`

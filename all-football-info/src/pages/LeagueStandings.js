@@ -36,37 +36,39 @@ const LeagueStandings = () => {
         ) : error ? (
           <LoadingMessage>Error fetching standings.</LoadingMessage>
         ) : (
-          <StandingsTable>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Team</th>
-                <th>Played</th>
-                <th>Wins</th>
-                <th>Draws</th>
-                <th>Losses</th>
-                <th>Points</th>
-              </tr>
-            </thead>
-            <tbody>
-              {standings.map((team) => (
-                <tr key={team.team.id}>
-                  <td>{team.rank}</td>
-                  <td>
-                    <TeamInfo>
-                      <img src={team.team.logo} alt={team.team.name} />
-                      <span>{team.team.name}</span>
-                    </TeamInfo>
-                  </td>
-                  <td>{team.all.played}</td>
-                  <td>{team.all.win}</td>
-                  <td>{team.all.draw}</td>
-                  <td>{team.all.lose}</td>
-                  <td>{team.points}</td>
+          <StandingsWrapper>
+            <StandingsTable>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Team</th>
+                  <th>Played</th>
+                  <th>Wins</th>
+                  <th>Draws</th>
+                  <th>Losses</th>
+                  <th>Points</th>
                 </tr>
-              ))}
-            </tbody>
-          </StandingsTable>
+              </thead>
+              <tbody>
+                {standings.map((team) => (
+                  <tr key={team.team.id}>
+                    <td>{team.rank}</td>
+                    <td>
+                      <TeamInfo>
+                        <img src={team.team.logo} alt={team.team.name} />
+                        <span>{team.team.name}</span>
+                      </TeamInfo>
+                    </td>
+                    <td>{team.all.played}</td>
+                    <td>{team.all.win}</td>
+                    <td>{team.all.draw}</td>
+                    <td>{team.all.lose}</td>
+                    <td>{team.points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </StandingsTable>
+          </StandingsWrapper>
         )}
       </StandingsContainer>
       
@@ -98,6 +100,9 @@ const HeaderSection = styled.div`
   text-align: center;
   margin-bottom: 30px;
 
+  @media (max-width: 768px) {
+    margin-top: 50px;
+
   h1 {
     font-size: 3rem;
     margin-bottom: 10px;
@@ -116,9 +121,14 @@ const HeaderSection = styled.div`
   }
 `;
 
+const StandingsWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+`;
+
 const StandingsTable = styled.table`
   width: 100%;
-  min-width: 400px;
   border-collapse: collapse;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -126,7 +136,7 @@ const StandingsTable = styled.table`
   padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   font-size: 1rem;
-  overflow-x: scroll;
+  min-width: 600px; /* Ensures table doesn't shrink too much */
 
   thead {
     background: rgba(255, 255, 255, 0.2);
@@ -155,12 +165,14 @@ const StandingsTable = styled.table`
 
   @media (max-width: 480px) {
     font-size: 0.8rem;
+
     th,
     td {
       padding: 5px 8px;
     }
   }
 `;
+
 
 const TeamInfo = styled.div`
   display: flex;
@@ -208,10 +220,6 @@ const LogoContainer = styled.div`
     object-fit: cover;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 
-    @media (max-width: 480px) {
-      width: 50px;
-      height: 50px;
-    }
   }
 `;
 
@@ -223,7 +231,7 @@ const TextContainer = styled.div`
   gap: 2px;
 
   @media (max-width: 480px) {
-    gap: 0;
+    opacity: 0;
   }
 `;
 

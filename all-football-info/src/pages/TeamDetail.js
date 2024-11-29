@@ -130,6 +130,14 @@ const Header = styled.div`
   flex-wrap: wrap;
   margin-bottom: 40px;
   animation: ${fadeIn} 1s ease-in;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 
 const LogoContainer = styled.div`
