@@ -79,6 +79,7 @@ const Container = styled.div`
   padding: 30px 30px;
   text-align: center;
   background: linear-gradient(120deg, #007bff, #ff7bff);
+  border-radius: 12px ;
   color: #fff;
 
   h2 {
