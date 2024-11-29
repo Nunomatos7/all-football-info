@@ -145,7 +145,7 @@ const About = () => {
             <strong>Teams:</strong> Displays team details for selected team.
           </li>
           <li>
-            <strong>Team Detail:</strong> Displays team details for selected team and the team's players.
+            <strong>Team Detail:</strong> Displays team details for selected team and the team's players. This is the page where the cross APIs' data occured to receive teams info like date of foundation.
           </li>
           <li>
             <strong>League Standings:</strong> Displays league standings for selected league.
