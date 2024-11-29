@@ -54,7 +54,7 @@ const LeagueStandings = () => {
                   <tr key={team.team.id}>
                     <td>{team.rank}</td>
                     <td>
-                      <TeamInfo>
+                      <TeamInfo onClick={() => navigate(`/teams/${team.team.id}`)}>
                         <img src={team.team.logo} alt={team.team.name} />
                         <span>{team.team.name}</span>
                       </TeamInfo>
@@ -178,6 +178,7 @@ const TeamInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 
   img {
     width: 30px;
