@@ -314,11 +314,11 @@ const ComparisonContainer = styled.div`
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
   min-height: 100vh;
-  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const Header = styled.div`
   margin-bottom: 30px;
+  animation: ${fadeIn} 0.5s ease-in-out;
 
   h1 {
     font-size: 2.5rem;
@@ -334,6 +334,7 @@ const Selectors = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const PlayerSection = styled.div`
@@ -370,6 +371,7 @@ const ComparisonSection = styled.div`
   display: flex;
   justify-content: space-around;
   margin-top: 40px;
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const PlayerCard = styled.div`
