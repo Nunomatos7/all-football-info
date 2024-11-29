@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FaHome, FaUsers, FaInfoCircle, FaTrophy } from "react-icons/fa";
+import { FaHome, FaUsers, FaInfoCircle, FaTrophy, FaUsersCog } from "react-icons/fa";
 
 const NavigationMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,7 +33,7 @@ const NavigationMenu = () => {
             <span>Standings</span>
           </MenuItem>
           <MenuItem onClick={() => handleNavigate("/playercomparison")}>
-            <FaUsers size={34} />
+            <FaUsersCog size={40} />
             <span>Players Comparison</span>
           </MenuItem>
           <MenuItem onClick={() => handleNavigate("/about")}>
