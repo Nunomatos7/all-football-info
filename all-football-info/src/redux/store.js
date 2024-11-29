@@ -8,7 +8,10 @@ const store = configureStore({
     league: leagueReducer, // Add league slice
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(footballApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: false,
+      immutableCheck: false,
+    }).concat(footballApi.middleware),
 });
 
 export default store;
