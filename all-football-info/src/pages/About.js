@@ -2,12 +2,16 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import logo from "../assets/images/logo.jpg";
 import Technologies from "../components/Technologies";
+import { useNavigate } from "react-router-dom";
+
 
 const About = () => {
+  const navigate = useNavigate();
+
   return (
     <AboutContainer>
       <Header>
-        <LogoSection>
+        <LogoSection onClick={() => navigate("/")}>
           <LogoContainer>
             <img src={logo} alt="App Logo" />
           </LogoContainer>
@@ -301,11 +305,12 @@ const HeaderTitle = styled.h2`
 const LogoSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   justify-content: center;
   position: absolute;
   top: 20px;
   left: 30px;
+  cursor: pointer;
   `;
 
 const LogoContainer = styled.div`
@@ -324,6 +329,7 @@ const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  gap: 2px;
 
   @media (max-width: 480px) {
     opacity: 0;
@@ -331,15 +337,17 @@ const TextContainer = styled.div`
 `;
 
 const AppName = styled.h1`
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
   margin: 0;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 `;
 
 const Slogan = styled.p`
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #d0d0d0;
   margin: 0;
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 `;
 
 const Section = styled.div`
