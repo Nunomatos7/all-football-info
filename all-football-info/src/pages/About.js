@@ -157,7 +157,7 @@ const About = () => {
             <strong>League Standings:</strong> Displays league standings for selected league. Opens the team's details by clicking on the team name/logo.
           </li>
           <li>
-            <strong>Player Comparison:</strong> Displays player comparison for two selected players.
+            <strong>Player Comparison:</strong> Displays player comparison for two selected players, where all the dropdowns are searchable. The user can compare their stats and see the difference between them.
           </li>
           <li>
             <strong>About:</strong> Displays project report.
@@ -168,19 +168,19 @@ const About = () => {
         <h3>Components</h3>
         <ul>
           <li>
-            <strong>Technologies:</strong> Displays the technologies used in the project.
+            <strong>Technologies:</strong> Displays the technologies used in the project to use in this report.
           </li>
           <li>
-            <strong>FloatingLeagueButton:</strong> Displays the league selector modal.
+            <strong>FloatingLeagueButton:</strong> Opens the league selector modal.
           </li>
           <li>
             <strong>LeagueSelectorModal:</strong> Displays the league selector modal.
           </li>
           <li>
-            <strong>GameDetailsModal:</strong> Displays the game details modal.
+            <strong>GameDetailsModal:</strong> Displays the game details modal, where the user can see all the match details.
           </li>
           <li>
-            <strong>NavigationMenu:</strong> Displays the navigation menu.
+            <strong>NavigationMenu:</strong> Displays the navigation menu with links to the Home, Teams, League Standings, Player Comparison, and About pages.
           </li>
         </ul>
         </Section>
