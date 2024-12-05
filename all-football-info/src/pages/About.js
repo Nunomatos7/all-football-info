@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import logo from "../assets/images/logo.jpg";
 import Technologies from "../components/Technologies";
 import { useNavigate } from "react-router-dom";
+import arch from "../assets/images/arch.png";
 
 
 const About = () => {
@@ -35,8 +36,8 @@ const About = () => {
         </p>
         <p>
           <strong>Project Repository: </strong>{""}
-          <a href="https://github.com/Nunomatos7/all-football-info" target="_blank" rel="noopener noreferrer">
-          https://github.com/Nunomatos7/all-football-info
+          <a href="https://github.com/Nunomatos7/tdw-mp2-Nuno-Matos" target="_blank" rel="noopener noreferrer">
+          https://github.com/Nunomatos7/tdw-mp2-Nuno-Matos
           </a>
         </p>
         <p>
@@ -132,6 +133,7 @@ const About = () => {
 │        └─ theme.js
 └─ README.md`}
         </pre>
+
       </Section>
 
       <Section>
@@ -139,7 +141,8 @@ const About = () => {
         <p>
           The application follows a modular architecture with reusable components and well-defined pages. 
           Each page focuses on a specific feature, such as displaying league standings or player comparisons. 
-          Styled-components ensure visual consistency, while React Router provides smooth navigation.
+          Styled-components ensure visual consistency, while React Router provides smooth navigation. The entire 
+          project is also entirely responsive, ensuring a seamless experience across devices.
         </p>
 
         <h3>Pages</h3>
@@ -183,6 +186,11 @@ const About = () => {
             <strong>NavigationMenu:</strong> Displays the navigation menu with links to the Home, Teams, League Standings, Player Comparison, and About pages.
           </li>
         </ul>
+
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", margin: "100px 0px 100px 0px" }}>
+          <h1 style={{ textAlign: "center" }}>Project Architecture</h1>
+          <img src={arch} alt="Project Architecture" style={{ width: "50%", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)" }} />
+        </div>
         </Section>
 
         <Section>
@@ -250,7 +258,17 @@ const About = () => {
           in building feature-rich web applications.
         </p>
       </Section>
+    
+      <Footer>
+        <FooterText>
+          <p>
+            &copy; 2024 OfffsideZone. All rights reserved. Designed and developed by {"Nuno Matos"}
+          </p>
+        </FooterText>
+      </Footer>
+
     </AboutContainer>
+
   );
 };
 
@@ -266,7 +284,7 @@ const fadeIn = keyframes`
 `;
 
 const AboutContainer = styled.div`
-  padding: 100px 200px 30px 200px;
+  padding: 100px 200px 0px 200px;
   text-align: center;
   background: linear-gradient(120deg, #007bff, #ff7bff);
   color: #ffffff;
@@ -378,6 +396,17 @@ const Section = styled.div`
     border-radius: 12px;
     overflow-x: auto;
   }
+`;
+
+const Footer = styled.footer`
+  margin-top: 50px;
+  padding: 20px 0;
+  background: rgba(0, 0, 0, 0.7);
+`;
+
+const FooterText = styled.div`
+  font-size: 1rem;
+  color: #fff;
 `;
 
 export default About;

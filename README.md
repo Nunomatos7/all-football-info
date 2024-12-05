@@ -1,8 +1,7 @@
 
 ```
-all-football-info
+tdw-mp2-Nuno-Matos
 ├─ .dist
-├─ .vercel
 ├─ all-football-info
 │  ├─ .env
 │  ├─ package-lock.json
