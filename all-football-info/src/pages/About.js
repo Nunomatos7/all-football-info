@@ -46,6 +46,18 @@ const About = () => {
           https://offfsidezone.vercel.app/
           </a>
         </p>
+        <p>
+          <strong>API football 1: </strong>
+            <a href="https://rapidapi.com/api-sports/api/api-football" target="_blank" rel="noopener noreferrer">
+            https://rapidapi.com/api-sports/api/api-football
+            </a>
+        </p>
+        <p>
+          <strong>API football 2: </strong>
+          <a href="https://dashboard.api-football.com/soccer/tester" target="_blank" rel="noopener noreferrer">
+          https://dashboard.api-football.com/soccer/tester
+          </a>
+        </p>
       </Section>
 
       <Section>
